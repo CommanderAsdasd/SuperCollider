@@ -30,6 +30,18 @@
 ~array_example_2.add(500);       // Adds 500 at the end
 ~array_example_2.insert(2, 255); // Inserts 255 at position 2 (couting from 0)
 ~array_example_2.put(2, 100);    // Replaces second position with 100
+~array_example_2[2] = 100;       // Same as .put
 ~array_example_2.permute(2);     // Puts position 2 to position 0 in array
 ~array_example_2;                // Evaluate the array
 
+/* Other ways to fill up arrays */
+Array.fill(10, 50);
+Array.fill(10, rrand(1, 10));
+Array.fill(10, {rrand(1, 10)});
+Array.fill(10, {arg i; i * 440});
+Array.series(10, 0, 1);
+Array.geom(10, 1, 2);
+(0..10);
+
+/* Empty array */
+Array.newClear(7);
