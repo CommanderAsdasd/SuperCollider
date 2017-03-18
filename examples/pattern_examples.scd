@@ -206,3 +206,30 @@ SynthDef(\synthdef_example_2, {
 ~pattern_player_9.resume;
 ~pattern_player_10.resume;
 ~pattern_player_11.resume;
+
+(
+/* Example from the A_Gentle_Introduction_To_SuperCollider.pdf. It uses
+   a local variable that contains the duration. */
+
+var myDurs = Pseq([Pn(1, 5), 3,
+	               Pn(1, 5), 3,
+	               Pn(1, 6), 1/2, 1/2, 1, 1, 3, 1, 3], inf) * 0.4;
+
+~upperMelody = Pbind(
+	\midinote, Pseq([69, 74, 76, 77, 79, 81, Pseq([81, 79, 81, 82, 79, 81], 2),
+		             82, 81, 79, 77, 76, 74, 74], inf),
+    \dur, myDurs;
+);
+
+~lowerMelody = Pbind(
+	\midinote, Pseq([57, 62, 61, 60, 59, 58, 57, 55, 53, 52, 50, 49, 50, 52,
+		             50, 55, 53, 52, 53, 55, 57, 58, 61, 62, 62], inf),
+	\dur, myDurs;
+);
+)
+
+/* Play the melodys */
+(
+~upperMelody.play;
+~lowerMelody.play;
+)
