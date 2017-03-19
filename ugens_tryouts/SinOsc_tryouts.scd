@@ -6,7 +6,7 @@
 /* The Wobbling Sine Drone
    This is a stereo FM synth. the 'sig' has two numbers (L/R) that
    are controlled by lfo1 and lfo2. The values of of the speed and the AM are
-   random (the {Rand()} functions) */
+   random (the Rand() functions) */
 
 ( // block open
 { // .fork;
@@ -15,13 +15,11 @@
 			var sig, lfo1, lfo2, env;
 
 			env = {EnvGen.kr(Env.linen(0.1, 0.5, 5, curve:-2), doneAction:2)};
-			lfo1 = {SinOsc.kr({Rand(0.1, 100)}).range({Rand(1, 3)},
-				                                      {Rand(3, 5)})};
-			lfo2 = {SinOsc.kr({Rand(0.1, 100)}).range({Rand(1, 3)},
-				                                      {Rand(3, 5)})};
-			sig = {SinOsc.ar([{Rand(20, 100)} * lfo1, {Rand(20, 100)} * lfo2],
+			lfo1 = {SinOsc.kr(Rand(0.1, 100)).range(Rand(1, 3), Rand(3, 5))};
+			lfo2 = {SinOsc.kr(Rand(0.1, 100)).range(Rand(1, 3), Rand(3, 5))};
+			sig = {SinOsc.ar([Rand(20, 100) * lfo1, Rand(20, 100) * lfo2],
 			                 0, 0.2) * env}.play;
-			rand(3.0, 6.0).wait;
+			(rand(3.0)+3).wait;
 		};
 	);
 }.fork;
@@ -36,12 +34,11 @@
 	inf.do (
 		{
 			var sig, env, line;
-			env = {EnvGen.kr(Env.linen(0.1, 0.1, {Rand(0.5, 1)},
-				                       curve:-2), doneAction:2)};
-			line = {XLine.kr({Rand(800, 500)}, {Rand(450, 50)},
-				                               {Rand(0.3, 1)})};
+			env = {EnvGen.kr(Env.linen(0.1, 0.1, Rand(0.5, 1), curve:-2),
+				             doneAction:2)};
+			line = {XLine.kr(Rand(800, 500), Rand(450, 50), Rand(0.3, 1))};
 			sig = {SinOsc.ar([line, line], 0, 0.2) * [env, env]}.play;
-			rand(1.0, 5.0).wait;
+			(rand(2.5)+0.5).wait;
 		};
 	);
 }.fork;
@@ -61,7 +58,7 @@
 				             doneAction:2)};
 			sig = {(SinOsc.ar( ((env + 0.1) * {Rand(400, 800)}),
 				              mul:0.5)!2 * env)}.play;
-			rand(0.5, 5.0).wait;
+			// rand(1.0).wait;
 		};
 	);
 }.fork;
@@ -77,13 +74,13 @@
 	inf.do (
 		{
 			var sig, mod_freq, env;
-			env = {EnvGen.kr(Env.linen(releaseTime: 5, curve:-6),
+			env = {EnvGen.kr(Env.linen(releaseTime: 5, curve:-3),
 				            doneAction:2)};
-			mod_freq = {Line.kr({Rand(800, 600)}, {Rand(500, 400)}, 5)};
-			sig = {SinOsc.ar(SinOsc.kr(mod_freq).range({Rand(200, 400)},
-				                                       {Rand(400, 800)}),
+			mod_freq = {Line.kr(Rand(800, 600), Rand(500, 400), 5)};
+			sig = {SinOsc.ar(SinOsc.kr(mod_freq).range(Rand(200, 400),
+				                                       Rand(400, 800)),
 				             mul:0.1)!2 * env}.play;
-			rand(5, 10.0).wait;
+			(rand(3.0)+2).wait;
 		};
 	);
 }.fork;
@@ -102,10 +99,10 @@
 		{
 			var sig, env, list;
 			list = {Array.fill(80, {Rand(50, 1500)})};
-			env = {EnvGen.kr(Env.perc(0.01, {Rand(2, 6)}), doneAction:2)};
-			sig = {FreeVerb.ar((Splay.ar((SinOsc.ar(list, mul:0.2)), 1) * env),
-				               0.5, 1, 1)}.play;
-			rrand(0.5, 4.0).wait;
+			env = {EnvGen.kr(Env.perc(0.01, Rand(2, 6).poll), doneAction:2)};
+            {FreeVerb.ar(Splay.ar(SinOsc.ar(list, mul:0.2), 1) * env,
+				         0.5, 1, 1)}.play;
+			(rand(3.5)+0.5).wait;
 		};
 	);
 }.fork;
@@ -168,7 +165,7 @@
 			env = {EnvGen.kr(Env.linen(0.01, 0.5, 2, curve:-2), doneAction:2)};
 			amplist = Array.geom(10, 1, 0.9).round(0.01);
 			{Splay.ar(SinOsc.ar(freqlist, 0, amplist * env) * 0.5)}.play;
-			rand(2.0, 8.0).wait;
+			(rand(1.5)+0.5).wait;
 		}
 	)
 }.fork;
