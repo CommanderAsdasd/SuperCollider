@@ -1,8 +1,12 @@
 /******************************************************************************/
 // Thomas Klinkenberg 2017
+// https://github.com/Thomasklinkenbergmusic/SuperCollider
 /******************************************************************************/
 
-/* The Wobbling Sine Drone */
+/* The Wobbling Sine Drone
+   This is a stereo FM synth. the 'sig' has two numbers (L/R) that
+   are controlled by lfo1 and lfo2. The values of of the speed and the AM are
+   random (the {Rand()} functions) */
 
 ( // block open
 { // .fork;
@@ -23,7 +27,9 @@
 }.fork;
 ) // block close
 
-/* Falling Sines */
+/* Falling Sines
+   Pitch is controlled bye the line and is being called 2 times in a array
+   for stereo effect (see 'sig) */
 
 ( // block open
 { // .fork;
@@ -41,7 +47,9 @@
 }.fork;
 ) // block close
 
-/* Plops */
+/* Plops
+   Same as above, only now a lot faster. The env controls the pitch and the
+   amplitude. */
 
 ( // block open
 { // .fork;
@@ -59,7 +67,10 @@
 }.fork;
 ) // block close
 
-/* Heavy FM */
+/* Heavy FM
+   The freq of the SinOsc in ' sig is controlled by a Line.kr that gives high
+   random values. The frequencies are high enough to make a strange FM effect.
+   */
 
 ( // block open
 { // .fork;
@@ -78,16 +89,20 @@
 }.fork;
 ) // block close
 
-/* Weird metal plates (duplicated sine waves) */
+/* Weird metal plates
+   Each hit has 80 (!) SinOsc with a random frequencies between 80 - 1500. The
+   list variables stores the 80 frequencies, SinOsc sees it as an array.
+   Normally the SinOsc tries to put over different channels (L, R and channel
+   3-80) The Splay.ar spreads the 80 SinOsc over 2 channels (L + R). Something
+   your DAW can't do ;) */
 
 ( // block open
 { // .fork;
 	inf.do (
 		{
-			var sig, env, list, done_env;
+			var sig, env, list;
 			list = {Array.fill(80, {Rand(50, 1500)})};
-			env = {EnvGen.kr(Env.perc(0.01, {Rand(2, 6)}))};
-			done_env = {EnvGen.kr(Env.perc(0.1, 8), doneAction:2)};
+			env = {EnvGen.kr(Env.perc(0.01, {Rand(2, 6)}), doneAction:2)};
 			sig = {FreeVerb.ar((Splay.ar((SinOsc.ar(list, mul:0.2)), 1) * env),
 				               0.5, 1, 1)}.play;
 			rrand(0.5, 4.0).wait;
@@ -96,17 +111,65 @@
 }.fork;
 ) // block clase
 
-/* RTD2 sings */
+/* RTD2 sings
+   A SinOsc that is controlled by LFNoise0 Ugens for random frequencies */
 
 ( // block open
 { // .fork;
 	1.do (
 		{
-			{SinOsc.ar([L§FNoise0.kr(SinOsc.kr(1).range(1, 10)).range(440, 880),
-				        LFNoise0.kr(SinOsc.kr(1, 0.5).range(1, 10)
-			            ).range(440, 880)],
+			{SinOsc.ar([LFNoise0.kr(SinOsc.kr(1).range(1, 10)).range(440, 880),
+				LFNoise0.kr(SinOsc.kr(1, 0.5).range(1, 10)).range(440, 880)],
 			mul:0.1)}.play;
 		};
 	);
 }.fork;
 ) // block closes
+
+/* The no-var-sine-machine
+   Maybe not the best example but interresting to analyse and fun to make. It
+   is a SinOsc that controls the frequency of a SinOsc that controls the
+   frequency of a SinOsc... etc! The same for the amplitude control. */
+
+( // block open
+{ // .fork;
+	1.do (
+		{
+			{SinOsc.ar
+				(SinOsc.kr
+					(SinOsc.kr
+						(SinOsc.kr(0.5,0, 10, 10),
+						 0, 5, 5),
+					 0, 500, 700),
+				 0, 0.5)!2 *
+			SinOsc.kr
+				(SinOsc.kr
+				    (SinOsc.kr
+					    (SinOsc.kr(0.01, 0, 0.2, 0.2),
+						 0, 0.3, 0.3),
+					0, 0.4, 0.4)
+			    )!2 * 0.5}.play;
+		};
+	)
+}.fork;
+) // block close
+
+/* Dissonance Bells
+   Making use of arrays for the frequencies and amplitudes. For more informa-
+   tion on fillings arrays look at my array_example on Github or help files! */
+
+( // block open
+{ // .fork;
+	inf.do (
+		{
+			var freq, freqlist, amplist, env, sig;
+			freq = {Rand(50, 500)};
+			freqlist = Array.geom(10, freq, 1.1).round(0.01);
+			env = {EnvGen.kr(Env.linen(0.01, 0.5, 2, curve:-2), doneAction:2)};
+			amplist = Array.geom(10, 1, 0.9).round(0.01);
+			{Splay.ar(SinOsc.ar(freqlist, 0, amplist * env) * 0.5)}.play;
+			rand(2.0, 8.0).wait;
+		}
+	)
+}.fork;
+) // block close
