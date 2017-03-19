@@ -102,7 +102,7 @@
 { // .fork;
 	1.do (
 		{
-			{SinOsc.ar([LFNoise0.kr(SinOsc.kr(1).range(1, 10)).range(440, 880),
+			{SinOsc.ar([L§FNoise0.kr(SinOsc.kr(1).range(1, 10)).range(440, 880),
 				        LFNoise0.kr(SinOsc.kr(1, 0.5).range(1, 10)
 			            ).range(440, 880)],
 			mul:0.1)}.play;
