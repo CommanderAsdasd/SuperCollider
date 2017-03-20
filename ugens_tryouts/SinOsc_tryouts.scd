@@ -136,7 +136,7 @@ SinOsc.kr(SinOsc.kr(SinOsc.kr(SinOsc.kr(0.01, 0, 0.2, 0.2), 0, 0.3, 0.3),
 			amplist = Array.geom(10, 1, 0.9).round(0.01);
 			{Splay.ar(SinOsc.ar(freqlist, 0, amplist * env) * 0.5)}.play;
 			(rand(1.5)+0.5).wait;
-		}
-	)
+		};
+	);
 }.fork;
 )
