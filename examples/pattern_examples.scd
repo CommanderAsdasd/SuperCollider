@@ -105,8 +105,8 @@
    arguments like freq and amp but also release (for the ADSR) and
    filter_freq. */
 SynthDef(\synthdef_example_1, {
-	arg freq = 440, amp = 1, gate = 1, attack = 0.1, decay = 0.5, sustain = 0.5,
-	    release = 0.5, filter_freq = 440;
+	arg freq = 440, amp = 1, gate = 1, attack = 0.1, decay = 0.5,
+	    sustain = 0.5, release = 0.5, filter_freq = 440;
 	var sig, env;
 	env = EnvGen.kr(Env.adsr(attack, decay, sustain, release, curve:-2),
 		              gate, doneAction:2);
