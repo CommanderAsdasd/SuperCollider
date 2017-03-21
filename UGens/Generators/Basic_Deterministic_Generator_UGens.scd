@@ -109,43 +109,58 @@ example closely and check the post window to see what it does!
 // Pulse wave with pulse-width modulation
 {Pulse.ar(220!2, SinOsc.kr(0.35, 0, 0.4, 0.5), 0.25)}.play;
 // Pulse wave with amplitude modulation
-{Pulse.ar(220!2, 0.5, LFPulse.kr(5, 0, 0.5, 1))}.play;
+{Pulse.ar(220!2, 0.5, LFPulse.kr(10, 0, 0.5, 1))}.play;
 /******************************************************************************/
 
 /*******************************************************************************
-| Saw & LFSaw |
----------------
-TODO -> Explanation about difference between Saw & LFSaw
+| Saw, LFSaw & VarSaw |
+-----------------------
+The Saw and LFSaw are both saw wave oscillators. The Saw UGen is band limitid
+and the LFSaw non-band-limited. Same as the pusle wave oscillators. Use the Saw
+object for audio output and check the first example post window.
+
+The VarSaw is Sawtooth-triangle oscillator with a variable duty. This means the
+VarSaw is a different waveform depending on the width that has been set by the
+user. The default of the width is 0.5 and that resulst in a triangle wave. Look
+at the examples.
 */
 
 // Both on control rate, no audio output (check post window)
 {Saw.kr(1, 1).poll}.play;
-{LFSaw.kr(1, 0.5, 1).poll}.play
+// {LFSaw.kr(1, 0.5, 1).poll}.play
 // A frequency with a negative value inverses the sawtooth direction
 {LFSaw.kr(-1, 0.5, 1).poll}.play
 
 // Saw wave on both channels (L+R) with the value multiplied by 0.25
 {Saw.ar(220!2, 0.25)}.play;
 // Saw wave with the frequency modulated by a LFSaw
-{Saw.ar(LFSaw.kr(-5, 0, 110, 330)!2, 0.25)}.play;
+{Saw.ar(LFSaw.kr(-5, 1, 110, 330)!2, 0.25)}.play;
+
+// Control rate, no audio output (check post window and scope)
+{VarSaw.kr(1, 0, 0.5, 1).poll.scope}.play;
+// VarSaw on control rate with a 0.95 width (check post window and scope)
+{VarSaw.kr(1, 0, 0.95, 1).poll.scope}.play;
+// VarSaw on control rate with a 0.05 width (check post window and scope)
+{VarSaw.kr(1, 0, 0.05, 1).poll.scope}.play;
+// VarSaw with the frequency modulation and width modulation
+( {VarSaw.ar(SinOsc.kr(2, 0, 110, 330)!2, 0,
+	         SinOsc.kr(2.5, 0, 0.3, 0.5), 0.25)}.play )
+// This VarSaw gives the same result as a Saw
+{VarSaw.ar(220!2, 0, 0, 0.25)}.play;
+
 /******************************************************************************/
 
 /*******************************************************************************
-| VarSaw & LFTri |
-------------------
-TODO -> Explanation about difference between VarSaw & LFTri
+| LFTri |
+---------
+LFTri is a non-band-limited triangle oscillator.
+
+NOTE: Negative values DON'T work with LFTri
 */
 
 // Both on control rate, no audio output (check post window)
-{VarSaw.kr(1, 0, 0.5, 1).poll}.play;
 {LFTri.kr(1, 0, 1).poll}.play;
-// VarSaw on control rate with a 0.75 width (check post window)
-{VarSaw.kr(1, 0, 0.75, 1).poll}.play;
 
-// NOTE: Negative values DON'T work with LFTri
+// {LFTri.ar(220!2, 0, 0.25)}.play;
 
-// Triangle wave on both channels with the value miltiplied by 0.25
-{VarSaw.ar(220, 0, 0.5, 0.25)}.play;
-// Triangle wave with the frequency modulation and width modulation
-{VarSaw.ar(LFTri.kr(2, 0, 110, 330), 0, LFTri.kr(2.5, 0, 0.3, 0.5), 0.25)}.play
 /******************************************************************************/
