@@ -161,6 +161,7 @@ NOTE: Negative values DON'T work with LFTri
 // Both on control rate, no audio output (check post window)
 {LFTri.kr(1, 0, 1).poll}.play;
 
-// {LFTri.ar(220!2, 0, 0.25)}.play;
+// Triangle wave with frequency 220
+{LFTri.ar(220!2, 0, 0.25)}.play;
 
 /******************************************************************************/
