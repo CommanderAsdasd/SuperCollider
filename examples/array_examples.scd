@@ -46,3 +46,5 @@ Array.geom(10, 1, 2);
 
 /* Empty array */
 Array.newClear(7);
+
+~array_example_1
